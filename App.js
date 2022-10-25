@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Button } from "react-native";
 
 import * as Google from "expo-auth-session/providers/google";
+import { UserInfo } from "./src/components/UserInfo";
 
 const googleAuthTokens = {
   expoClientId:
@@ -16,22 +17,41 @@ const googleAuthTokens = {
 };
 
 export default function App() {
-  const [_, response, promptAsync] =
-    Google.useAuthRequest(googleAuthTokens);
+  const [userData, setUserData] = React.useState();
+
+  const [_, response, promptAsync] = Google.useAuthRequest(googleAuthTokens);
 
   React.useEffect(() => {
-
-    console.log(response)
-
     if (response?.type === "success") {
-      const { authentication } = response;
+      const { accessToken } = response.authentication;
+
+      fetch(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`,
+        {
+          method: "GET",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "follow",
+          referrerPolicy: "no-referrer",
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => setUserData(data));
     }
   }, [response]);
 
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <Button style={styles.button} title="Click Here to Loggin With Google" onPress={() => promptAsync()} />
+      <Text style={styles.text}>Simple Google Auth App With Expo</Text>
+      <Button
+        title="Click Here to Loggin With Google"
+        onPress={() => promptAsync()}
+      />
+      {response?.type === "success" && userData && <UserInfo {...userData} />}
       <StatusBar style="auto" />
     </View>
   );
@@ -44,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  button: {
-    marginTop: 20,
+  text: {
+    marginBottom: 20,
   },
 });
