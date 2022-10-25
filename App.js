@@ -6,14 +6,10 @@ import * as Google from "expo-auth-session/providers/google";
 import { UserInfo } from "./src/components/UserInfo";
 
 const googleAuthTokens = {
-  expoClientId:
-    "362406565316-61g4a11itu8untc0esr0c5b5otqt0rv6.apps.googleusercontent.com",
-  iosClientId:
-    "362406565316-lrmvvpsh2dqgo1qnp1lns7bosblg8m61.apps.googleusercontent.com",
-  androidClientId:
-    "362406565316-ee29688l04jq3h17to915rt25k3djug3.apps.googleusercontent.com",
-  webClientId:
-    "362406565316-7qep7sa0vra19hcva94ukaijhhbavg35.apps.googleusercontent.com",
+  expoClientId: "YOUR_EXPOCLIENT_GUID_HERE",
+  iosClientId: "YOUR_IOSCLIENT_GUID_HERE",
+  androidClientId: "YOUR_ANDROIDCLIENT_GUID_HERE",
+  webClientId: "YOUR_WEBCLIENT_GUID_HERE",
 };
 
 export default function App() {
@@ -31,7 +27,6 @@ export default function App() {
           method: "GET",
           mode: "cors",
           cache: "no-cache",
-          credentials: "same-origin",
           headers: {
             "Content-Type": "application/json",
           },
