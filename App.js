@@ -12,6 +12,8 @@ const googleAuthTokens = {
   webClientId: "YOUR_WEBCLIENT_GUID_HERE",
 };
 
+const googleApiUrl = "https://www.googleapis.com/oauth2/v1/";
+
 export default function App() {
   const [userData, setUserData] = React.useState();
 
@@ -21,19 +23,16 @@ export default function App() {
     if (response?.type === "success") {
       const { accessToken } = response.authentication;
 
-      fetch(
-        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`,
-        {
-          method: "GET",
-          mode: "cors",
-          cache: "no-cache",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          redirect: "follow",
-          referrerPolicy: "no-referrer",
-        }
-      )
+      fetch(`${googleApiUrl}/userinfo?access_token=${accessToken}`, {
+        method: "GET",
+        mode: "cors",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+      })
         .then((response) => response.json())
         .then((data) => setUserData(data));
     }
